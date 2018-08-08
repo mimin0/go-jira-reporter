@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-def parseExport(filename):
+def parseExport(filename, status):
     tree = ET.parse(filename)
     root = tree.getroot()
     for items in root.iter('item'):
@@ -10,9 +10,12 @@ def parseExport(filename):
         epic = items.find('customfields')[5][1][0].text
         if "OCFD" not in epic:
             epic = items.find('customfields')[6][1][0].text
-            print('{},{},{}'.format(epic, jira_id, assigne))
+            print('{},{},{},{}'.format(status, epic, jira_id, assigne))
         else:
-            print('{},{},{}'.format(epic, jira_id, assigne))
+            print('{},{},{},{}'.format(status, epic, jira_id, assigne))
 
 for i in ['./done.xml']:
-    parseExport(i)
+    parseExport(i, "done")
+
+for n in ['./notdone.xml']:
+    parseExport(n, "not done")
