@@ -14,8 +14,8 @@ def parseExport(filename, status):
         else:
             print('{},{},{},{}'.format(status, epic, jira_id, assigne))
 
-for i in ['./done.xml']:
+for i in ['/Users/Documents/18.17/done.xml']:
     parseExport(i, "done")
 
-for n in ['./notdone.xml']:
+for n in ['/Users/Documents/18.17/notdone.xml']:
     parseExport(n, "not done")
