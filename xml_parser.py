@@ -1,21 +1,27 @@
 import xml.etree.ElementTree as ET
-def parseExport(filename, status):
+def parseExport(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
+    stpoints = 0
+
     for items in root.iter('item'):
         #if "Sub-task" not in items.find('type').text:
         jira_id = items.find('key').text
         assigne = items.find('assignee').text
-        # epic2 = items.find('customfields')
-        epic = items.find('customfields')[5][1][0].text
-        if "OCFD" not in epic:
-            epic = items.find('customfields')[6][1][0].text
-            print('{},{},{},{}'.format(status, epic, jira_id, assigne))
-        else:
-            print('{},{},{},{}'.format(status, epic, jira_id, assigne))
+        
+        # print('{},{},{}'.format(status, jira_id, assigne))
+        for k in items.find('customfields'):
+            m = k.attrib["id"]
+            if "customfield_10002" in m:
+                stpoints += float(k[1][0].text)
+    
+    return stpoints
 
-for i in ['/Users/Documents/18.17/done.xml']:
-    parseExport(i, "done")
+done = parseExport('./done.xml')
+not_done = parseExport('./notdone.xml')
+# removed = 
 
-for n in ['/Users/Documents/18.17/notdone.xml']:
-    parseExport(n, "not done")
+total = done + not_done
+finished_scope = int(done * 100 / total)
+
+print("done: {}\nnot done: {}\nfinished scope: {}%".format(done, not_done, finished_scope))
